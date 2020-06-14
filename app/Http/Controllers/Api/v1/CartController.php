@@ -22,22 +22,6 @@ class CartController extends Controller
         return $cartArray;
     }
 
-    public function testCart(Request $request, $productId,$accountId)
-    {
-        $product = Product::find($productId);
-        session_start();
-        if (!is_writable(session_save_path())) {
-    echo 'Session path "'.session_save_path().'" is not writable for PHP!'; 
-}
-        if (isset($_SESSION[$accountId])) {
-            return "ad";
-        }
-        else{
-            $_SESSION[$accountId] = "BISA";
-            return "baru ad";
-        }
-    }
-
     public function viewCart($id)
     {
         
