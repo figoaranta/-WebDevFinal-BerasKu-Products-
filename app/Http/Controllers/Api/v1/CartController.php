@@ -13,19 +13,31 @@ class CartController extends Controller
     {
         $product = Product::find($productId);
         $oldCart = Session::has('cart'.$accountId) ? Session::get('cart'.$accountId) :null;
-        if ($oldCart == null) {
-            echo "kosong bang";
-        }
         $cart = new Cart($oldCart);
         $cart->add($product, $productId);
         $request->session()->put('cart'.$accountId,$cart);
         
         $cartArray = [];
         array_push($cartArray, $cart->items,$cart->totalQuantity,$cart->totalPrice);
-        array_push($cartArray, $cart->items,$cart->totalQuantity,$cart->totalPrice);
-
         return $cartArray;
     }
+
+    public function testCart(Request $request, $productId,$accountId)
+    {
+        $product = Product::find($productId);
+        session_start();
+        if (!is_writable(session_save_path())) {
+    echo 'Session path "'.session_save_path().'" is not writable for PHP!'; 
+}
+        if (isset($_SESSION[$accountId])) {
+            return "ad";
+        }
+        else{
+            $_SESSION[$accountId] = "BISA";
+            return "baru ad";
+        }
+    }
+
     public function viewCart($id)
     {
         
