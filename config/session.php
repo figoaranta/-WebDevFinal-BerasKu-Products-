@@ -155,7 +155,9 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN', 'https://berasku-products.herokuapp.com'),
+    // 'domain' => env('SESSION_DOMAIN', null),
+    'domain' => 'https://berasku-products.herokuapp.com',
+
 
     /*
     |--------------------------------------------------------------------------
