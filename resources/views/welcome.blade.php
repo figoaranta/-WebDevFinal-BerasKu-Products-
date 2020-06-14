@@ -1,4 +1,4 @@
-<form action = "https:berasku.herokuapp.com/api/v1/addToCart/1/1" method="POST"> 
+<form action = "https:berasku.herokuapp.com/api/addToCart/1/1" method="POST"> 
     <button type="submit" value="submit">Buy now</button>
 </form>
 
