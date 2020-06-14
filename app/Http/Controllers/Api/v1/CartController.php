@@ -14,7 +14,7 @@ class CartController extends Controller
         $product = Product::find($productId);
         $oldCart = Session::has('cart'.$accountId) ? Session::get('cart'.$accountId) :null;
         if ($oldCart == null) {
-            return "kosong bang";
+            echo "kosong bang";
         }
         $cart = new Cart($oldCart);
         $cart->add($product, $productId);
