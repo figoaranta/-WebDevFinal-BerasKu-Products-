@@ -22,6 +22,8 @@ class CartController extends Controller
         
         $cartArray = [];
         array_push($cartArray, $cart->items,$cart->totalQuantity,$cart->totalPrice);
+        array_push($cartArray, $cart->items,$cart->totalQuantity,$cart->totalPrice);
+
         return $cartArray;
     }
     public function viewCart($id)
