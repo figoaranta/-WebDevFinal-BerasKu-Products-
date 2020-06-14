@@ -31,7 +31,7 @@ Route::prefix('v1')->group(function(){
 
 	Route::delete('/deleteCartAll/{id}/{accountId}','Api\v1\CartController@deleteCartItemAll');
 	Route::delete('/deleteCart/{id}/{accountId}', 'Api\v1\CartController@deleteCartItem');
-	Route::post('/addToCart/{productId}/{accountId}','Api\v1\CartController@testCart');
+	Route::post('/addToCart/{productId}/{accountId}','Api\v1\CartController@addToCart');
 	Route::get('/cart/{id}', 'Api\v1\CartController@viewCart');
 });
 
