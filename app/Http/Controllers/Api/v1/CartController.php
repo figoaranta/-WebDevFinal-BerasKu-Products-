@@ -37,12 +37,11 @@ class CartController extends Controller
         $cart = DB::table('carts')->where('id', $accountId)->first();
         if ($cart) {
             $oldCart = $cart;
-            $oldCart->items = json_decode($oldCart->items,true);
+            $oldCart->productId = json_decode($oldCart->productId,true);
         }
         else{
             $oldCart = null;
         }
-        
         $newCart = new Cart($oldCart);
 
         $newCart->add($arrayObject, $productId);
@@ -51,7 +50,7 @@ class CartController extends Controller
         if ($cart == null) {
             $output->insert([
             'id' => $accountId,
-            'items' => json_encode($newCart->items),
+            'productId' => json_encode($newCart->productId),
             'totalPrice' => $newCart->totalPrice,
             'totalQuantity' => $newCart->totalQuantity
             ]);
@@ -59,7 +58,7 @@ class CartController extends Controller
         else{
             $output->update([
             'id' => $accountId,
-            'items' => json_encode($newCart->items),
+            'productId' => json_encode($newCart->productId),
             'totalPrice' => $newCart->totalPrice,
             'totalQuantity' => $newCart->totalQuantity
             ]);
@@ -78,7 +77,7 @@ class CartController extends Controller
             return response()->json(["Cart is currently empty"]);
         }
         else{
-            $cart->items = json_decode(($cart->items));
+            $cart->productId = json_decode($cart->productId);
             return response()->json([$cart]);
         }
         
@@ -118,13 +117,13 @@ class CartController extends Controller
 
         
         if($oldCart->items[$id]['quantity'] == 1){
-
             $oldCart->totalQuantity = $oldCart->totalQuantity-1;
             $oldCart->totalPrice = $oldCart->totalPrice - $oldCart->items[$id]['price'];
             unset($oldCart->items[$id]);
             $cartArray = [];
             return response()->json([]);
         }
+
         $basePrice = $oldCart->items[$id]['price']/$oldCart->items[$id]['quantity'];
 
         $oldCart->totalQuantity = $oldCart->totalQuantity-1;
@@ -132,6 +131,13 @@ class CartController extends Controller
         $oldCart->items[$id]['price'] = $oldCart->items[$id]['price'] - $basePrice;
         $oldCart->totalPrice = $oldCart->totalPrice - $basePrice;
         
+
+        $output->update([
+        'id' => $accountId,
+        'items' => json_encode($oldCart->items),
+        'totalPrice' => $oldCart->totalPrice,
+        'totalQuantity' => $oldCart->totalQuantity
+        ]);
         // $request->session()->put('cart',$oldCart);
         return response()->json([]);
     }

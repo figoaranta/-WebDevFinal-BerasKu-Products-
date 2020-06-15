@@ -4,35 +4,35 @@ namespace App;
 
 class Cart
 {
-    public $items;
+    public $productId;
     public $totalQuantity = 0;
     public $totalPrice = 0;
 
     public function __construct($oldCart)
     {
         if($oldCart){
-            $this->items = $oldCart->items;
+            $this->productId = $oldCart->productId;
             $this->totalQuantity = $oldCart->totalQuantity;
             $this->totalPrice = $oldCart->totalPrice;
         }
         else{
-            $this->items = null;
+            $this->productId = null;
         }
     }
 
     public function add($item,$id)
     {
         $storedItem = ['quantity'=>0 , 'price' => $item->price , 'item' => $item];
-        if ($this->items) {
-            if (array_key_exists($id, $this->items)) {
-                $storedItem = $this->items[$id];
+        if ($this->productId) {
+            if (array_key_exists($id, $this->productId)) {
+                $storedItem = $this->productId[$id];
             }
         }
         $storedItem['quantity']++;
         $storedItem['price'] = $item->price * $storedItem['quantity'];
         $this->totalQuantity++;
         $this->totalPrice += $item->price;
-        $this->items[$id] = $storedItem;
+        $this->productId[$id] = $storedItem;
     }
 
 
