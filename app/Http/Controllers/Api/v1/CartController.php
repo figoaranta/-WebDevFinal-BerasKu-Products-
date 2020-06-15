@@ -105,7 +105,7 @@ class CartController extends Controller
         $output = DB::table('carts')->where('id', $accountId);
         if ($cart) {
             $oldCart = $cart;
-            $oldCart->items = json_decode($oldCart->items,true);
+            $oldCart->productId = json_decode($oldCart->productId,true);
         }
         else{
             $oldCart = null;
@@ -116,29 +116,66 @@ class CartController extends Controller
         }
 
         
-        if($oldCart->items[$id]['quantity'] == 1){
+        if($oldCart->productId[$id]['quantity'] == 1){
             $oldCart->totalQuantity = $oldCart->totalQuantity-1;
-            $oldCart->totalPrice = $oldCart->totalPrice - $oldCart->items[$id]['price'];
-            unset($oldCart->items[$id]);
+            $oldCart->totalPrice = $oldCart->totalPrice - $oldCart->productId[$id]['price'];
+
+            unset($oldCart->productId[$id]);
+
+            $output->update([
+                'id' => $accountId,
+                'productId' => json_encode($oldCart->productId),
+                'totalPrice' => $oldCart->totalPrice,
+                'totalQuantity' => $oldCart->totalQuantity
+                ]);
             $cartArray = [];
             return response()->json([]);
         }
 
-        $basePrice = $oldCart->items[$id]['price']/$oldCart->items[$id]['quantity'];
+        $basePrice = $oldCart->productId[$id]['price']/$oldCart->productId[$id]['quantity'];
 
         $oldCart->totalQuantity = $oldCart->totalQuantity-1;
-        $oldCart->items[$id]['quantity'] = $oldCart->items[$id]['quantity']-1;
-        $oldCart->items[$id]['price'] = $oldCart->items[$id]['price'] - $basePrice;
+        $oldCart->productId[$id]['quantity'] = $oldCart->productId[$id]['quantity']-1;
+        $oldCart->productId[$id]['price'] = $oldCart->productId[$id]['price'] - $basePrice;
         $oldCart->totalPrice = $oldCart->totalPrice - $basePrice;
         
 
         $output->update([
         'id' => $accountId,
-        'items' => json_encode($oldCart->items),
+        'productId' => json_encode($oldCart->productId),
         'totalPrice' => $oldCart->totalPrice,
         'totalQuantity' => $oldCart->totalQuantity
         ]);
         // $request->session()->put('cart',$oldCart);
+        return response()->json([]);
+    }
+    public function deleteCartItemAll(Request $request, $id,$accountId)
+    {
+        $cart = DB::table('carts')->where('id', $accountId)->first();
+        $output = DB::table('carts')->where('id', $accountId);
+        if ($cart) {
+            $oldCart = $cart;
+            $oldCart->productId = json_decode($oldCart->productId,true);
+        }
+        else{
+            $oldCart = null;
+        }
+
+        $oldCart->totalPrice = $oldCart->totalPrice - $oldCart->productId[$id]['price'];
+        $oldCart->totalQuantity = $oldCart->totalQuantity - $oldCart->productId[$id]['quantity'];
+        unset($oldCart->productId[$id]);
+
+        $output->update([
+            'id' => $accountId,
+            'productId' => json_encode($oldCart->productId),
+            'totalPrice' => $oldCart->totalPrice,
+            'totalQuantity' => $oldCart->totalQuantity
+        ]);
+        
+        if($oldCart->productId == null){
+            $output->delete();
+            // Session::flush();
+        }
         return response()->json([]);
     }
     // public function deleteCartItem(Request $request ,$id,$accountId)
@@ -168,16 +205,16 @@ class CartController extends Controller
     //     // $request->session()->put('cart',$oldCart);
     //     return response()->json([]);
     // }
-    public function deleteCartItemAll(Request $request, $id,$accountId)
-    {
-        $oldCart = Session::has('cart'.$accountId) ? Session::get('cart'.$accountId) :null;
-        $oldCart->totalPrice = $oldCart->totalPrice - $oldCart->items[$id]['price'];
-        $oldCart->totalQuantity = $oldCart->totalQuantity - $oldCart->items[$id]['quantity'];
-        unset($oldCart->items[$id]);
-        if($oldCart->items == null){
-            Session::forget('cart'.$accountId);
-            // Session::flush();
-        }
-        return response()->json([]);
-    }
+    // public function deleteCartItemAll(Request $request, $id,$accountId)
+    // {
+    //     $oldCart = Session::has('cart'.$accountId) ? Session::get('cart'.$accountId) :null;
+    //     $oldCart->totalPrice = $oldCart->totalPrice - $oldCart->items[$id]['price'];
+    //     $oldCart->totalQuantity = $oldCart->totalQuantity - $oldCart->items[$id]['quantity'];
+    //     unset($oldCart->items[$id]);
+    //     if($oldCart->items == null){
+    //         Session::forget('cart'.$accountId);
+    //         // Session::flush();
+    //     }
+    //     return response()->json([]);
+    // }
 }
