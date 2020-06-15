@@ -24,7 +24,7 @@ Route::prefix('v1')->group(function(){
 
 	Route::apiResource('/post','Api\v1\PostController')->only(['show','destroy','update','store']);
 	Route::apiResource('/posts','Api\v1\PostController')->only(['index']);
-	Route::post('/postSerach','Api\v1\PostController@search');
+	Route::post('/postSearch','Api\v1\PostController@search');
 	
 	Route::apiResource('/productImages','Api\v1\productImageController')->only(['index']);
 	Route::apiResource('/productImage','Api\v1\productImageController')->only(['show','destroy','update','store']);
@@ -33,6 +33,8 @@ Route::prefix('v1')->group(function(){
 	Route::delete('/deleteCart/{id}/{accountId}', 'Api\v1\CartController@deleteCartItem');
 	Route::post('/addToCart/{productId}/{accountId}','Api\v1\CartController@addToCart');
 	Route::get('/cart/{id}', 'Api\v1\CartController@viewCart');
+
+	// Route::apiResource('/carts','Api\v1\CartController@addToCart');
 });
 
 
