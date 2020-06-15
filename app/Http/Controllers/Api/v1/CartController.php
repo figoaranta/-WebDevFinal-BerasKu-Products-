@@ -73,11 +73,12 @@ class CartController extends Controller
     public function viewCart($id)
     {
         $cart = DB::table('carts')->where('id', $id)->first();
-        $cart->items = json_decode(($cart->items));
+        
         if($cart == null){
             return response()->json(["Cart is currently empty"]);
         }
         else{
+            $cart->items = json_decode(($cart->items));
             return response()->json([$cart]);
         }
         
@@ -102,6 +103,7 @@ class CartController extends Controller
     {
         
         $cart = DB::table('carts')->where('id', $accountId)->first();
+        $output = DB::table('carts')->where('id', $accountId);
         if ($cart) {
             $oldCart = $cart;
             $oldCart->items = json_decode($oldCart->items,true);
@@ -110,11 +112,11 @@ class CartController extends Controller
             $oldCart = null;
         }
         if($oldCart->totalQuantity == 1){
-            $cart->delete();
+            $output->delete();
             return response()->json([]);            
         }
 
-        return $oldCart;
+        
         if($oldCart->items[$id]['quantity'] == 1){
 
             $oldCart->totalQuantity = $oldCart->totalQuantity-1;
