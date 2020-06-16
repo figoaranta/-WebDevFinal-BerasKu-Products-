@@ -56,6 +56,25 @@ class ProductController extends Controller
             "inputRiceQuantity" => "required",
 
         ]);
+        if ($request->inputRiceGradeType == "null") {
+            $request->inputRiceGradeType = null;
+        }
+        if ($request->inputRiceType == "null") {
+            $request->inputRiceType  = null;
+        }
+        if ($request->inputRiceShapeType == "null") {
+            $request->inputRiceShapeType  = null;
+        }
+        if ($request->inputRiceTextureType == "null") {
+            $request->inputRiceTextureType  = null;
+        }
+        if ($request->inputRiceColorType == "null") {
+            $request->inputRiceColorType  = null;
+        }
+        if ($request->inputRiceQuantity == "null") {
+            $request->inputRiceQuantity  = null;
+        }
+
         $productsArray = [];
         $products = Product::where('riceGradeType','like','%'.$request->inputRiceGradeType.'%')->where('riceType','like','%'.$request->inputRiceType.'%')->where('riceShapeType','like','%'.$request->inputRiceShapeType.'%')->where('riceTextureType','like','%'.$request->inputRiceTextureType.'%')->where('riceColorType','like','%'.$request->inputRiceColorType.'%')->where('riceQuantity','like','%'.$request->inputRiceQuantity.'%')->get();
         foreach ($products as $product) {
