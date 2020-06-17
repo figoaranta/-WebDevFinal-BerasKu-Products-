@@ -20,8 +20,12 @@ class productImageController extends Controller
     		}
     	}
         for ($i=0; $i < count($images); $i++) { 
-            array_push($imagesURL, Storage::disk('s3')->url($images[$i]));
+            $url = Storage::disk('s3')->url($images[$i]);
+            $url = substr($url, 4);
+            $url = "https" . $url;
+            array_push($imagesURL, $url);
         }
+
     	// return response()->file((public_path('/sources/productImages/'.$images[0])));
         return response()->json(["productImageURL" => $imagesURL]);
     	
