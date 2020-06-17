@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class productImageController extends Controller
 {
-    public function show(productImage $productId)
+    public function show($productId)
     {
     	$productImages = productImage::all();
     	$images = [];
@@ -19,6 +19,7 @@ class productImageController extends Controller
     			array_push($images, $productImage);
     		}
     	}
+
         for ($i=0; $i < count($images); $i++) { 
             $url = Storage::disk('s3')->url($images[$i]);
             $url = substr($url, 4);
