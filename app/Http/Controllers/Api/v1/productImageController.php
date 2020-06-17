@@ -59,7 +59,7 @@ class productImageController extends Controller
     	return response()->json(["Status"=>"Success","Path"=>$path],200);
     }
 
-    public function update(Request $request, ProductImage $productId)
+    public function update(Request $request, $productId)
     {
     	$count = $request->elementImage;
     	$productImages = productImage::all();
