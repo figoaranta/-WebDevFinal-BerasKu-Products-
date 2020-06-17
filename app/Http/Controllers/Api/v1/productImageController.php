@@ -14,7 +14,7 @@ class productImageController extends Controller
     	$images = [];
         $imagesURL = [];
     	foreach ($productImages as $productImage) {
-    		if($productImage->productId = $productId){
+    		if($productImage->productId == $productId){
     			$productImage = $productImage->productImage;
     			array_push($images, $productImage);
     		}
