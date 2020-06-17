@@ -28,10 +28,6 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-
-        if($post->userId != $user->id){
-            return response()->json(['error'=> "Unable to delete other user's post"]);
-        }
     	$post->delete();
     	return response()->json([]);
     } 
